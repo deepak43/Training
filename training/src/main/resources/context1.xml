@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean name="dataSource,dbcp" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="org.h2.Driver" />
+		<property name="url" value="jdbc:h2:tcp://localhost/~/training" />
+		<property name="username" value="sa" />
+		<property name="password" value="" />
+		<property name="maxTotal" value="50" />
+		<property name="maxIdle" value="10" />
+		<property name="minIdle" value="2" />
+		<property name="maxWaitMillis" value="5000" />
+	</bean>
+
+	<bean name="jdbc" class="com.hpe.training.dao.impl.JdbcProductDao" autowire="byName" scope="singleton" lazy-init="true">
+		<!--  manual wiring of one bean (dbcp) with another (this) -->
+		<!-- manual wiring vial setter injection -->
+		
+		<!-- <property name="dataSource" ref="dbcp" /> -->
+	</bean>
+	
+	<bean class="com.hpe.training.dao.impl.JdbcProductDao" scope="singleton" lazy-init="true">
+	
+	<!-- ask spring to use an overloaded constructor -->
+	<constructor-arg value="org.h2.Driver"></constructor-arg>
+	<constructor-arg value="jdbc:h2:tcp://localhost/~/training"></constructor-arg>
+	<constructor-arg value="sa"></constructor-arg>
+	<constructor-arg value=""></constructor-arg>
+	</bean>
+	<bean name="csv" class="com.hpe.training.dao.impl.CsvProductDao" lazy-init="true"/>
+
+</beans>
