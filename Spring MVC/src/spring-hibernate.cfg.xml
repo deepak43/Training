@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<property name="dialect">org.hibernate.dialect.H2Dialect</property>
+		
+		<mapping class="com.hpe.training.entity.Category" />
+		<mapping class="com.hpe.training.entity.Product" />
+		<mapping class="com.hpe.training.entity.Supplier" />
+		<mapping class="com.hpe.training.entity.Customer" />
+		<mapping class="com.hpe.training.entity.Employee" />
+		<mapping class="com.hpe.training.entity.Shipper" />
+		<mapping class="com.hpe.training.entity.Order" />
+		<mapping class="com.hpe.training.entity.LineItem" />
+		<mapping class="com.hpe.training.entity.Laptop" />
+	</session-factory>
+</hibernate-configuration>

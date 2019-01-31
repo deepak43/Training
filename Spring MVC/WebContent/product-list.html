@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html ng-app="myapp">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular.min.js">
+</script>
+
+<script>
+	angular.module('myapp', [])
+	.controller('main', function($scope, $http) {
+		$scope.title = 'This is AngularJS client for Spring MVC Rest Endpoint';
+		$http.get('./api/products')
+		.then(resp=>{
+			$scope.products = resp.data;
+		})
+	});
+</script>
+</head>
+<body ng-controller="main">
+	<h1>{{ title }} </h1>
+	<h2>List of all products</h2>	
+	
+	<table border="1" id="productsTable">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Quantity per unit</th>
+				<th>Unit price (USD)</th>
+				<th>Units in stock</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="p in products">
+				<td>{{ p.productName }} </td>
+				<td>{{ p.quantityPerUnit }}</td>
+				<td>{{ p.unitPrice }}</td>
+				<td>{{ p.unitsInStock }}</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>
