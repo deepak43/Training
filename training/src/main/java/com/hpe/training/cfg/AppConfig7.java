@@ -11,20 +11,34 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.hibernate4.HibernateTemplate;
+import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.hpe.training.dao.ProductDao;
 import com.hpe.training.dao.impl.JdbcProductDao;
 
-@ComponentScan(basePackages = {"com.hpe.training.dao"})
+@EnableTransactionManagement //creates a proxy for managing transactions
+@EnableAspectJAutoProxy
+@ComponentScan(basePackages = {"com.hpe.training.dao", "com.hpe.training.aop"})
 @Configuration
 public class AppConfig7 {
 
+	//Transactions via HibernateTemplate are managed by HibernateTransactionManager
+	//Transactions via JdbcTemplate are managed by DataSource
+	//HibernateTransactionManager depends on SessionFactory
+	@Bean
+	public HibernateTransactionManager txManager(SessionFactory sf) //dependency injection
+	{
+		return new HibernateTransactionManager(sf); //manual wiring
+	}
+	
 	@Bean(name= {"dataSource"})
 	public BasicDataSource h2Dbcp()
 	{

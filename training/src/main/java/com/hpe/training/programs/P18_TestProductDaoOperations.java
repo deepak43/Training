@@ -3,6 +3,7 @@ package com.hpe.training.programs;
 import java.util.List;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.dao.DataAccessException;
 
 import com.hpe.training.cfg.AppConfig6;
 import com.hpe.training.cfg.AppConfig7;
@@ -28,17 +29,25 @@ public class P18_TestProductDaoOperations {
 		System.out.println("Category: " + p.getCategory().getCategoryName());
 		System.out.println("Supplied by: " + p.getSupplier().getCompanyName() + "\n");
 		
-		//System.out.println("Before update price = " + p.getUnitPrice());
-		//p.setUnitPrice(p.getUnitPrice() + 1);
-		//dao.update(p);
-		//p = dao.get(1);
-		//System.out.println("After update price = " + p.getUnitPrice());
+		try {
+			System.out.println("Before update price = " + p.getUnitPrice());
+			p.setUnitPrice(p.getUnitPrice() + 1);
+			dao.update(p);
+			p = dao.get(1);
+			System.out.println("After update price = " + p.getUnitPrice());
+		} catch (DaoException e) {
+			System.out.println("Got an exception of type: " + e.getClass());
+			System.err.println("There was an exception while updating the product price");
+		}
 		
 		List<Product> list = dao.getAll();
 		System.out.println("There are "+ list.size() + " products");
 		
 		list = dao.getProductByPrice(50.0, 500.0);
 		System.out.println("There are "+ list.size() + " products between $50 to $500");
+		
+		list = dao.getProductByPrice(500.0, 50.0);
+		System.out.println("There are "+ list.size() + " products between $500 to $50");
 		
 		list = dao.getProductsNotInStock();
 		System.out.println("There are "+ list.size() + " products out of stock");
